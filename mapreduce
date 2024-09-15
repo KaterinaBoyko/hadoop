@@ -1,0 +1,74 @@
+docker run -it --name hadoop-cluster -p 9870:9870 -p 8088:8088 -p 19888:19888 -p 10020:10020 bigdata/hadoop
+
+import sys
+
+for line in sys.stdin:
+        data = line.strip().split(',')
+
+       if data[0] != "id": 
+        try:
+            price = float(data[9])  (индекс 9)
+            print(f"key\t{price}\t1")
+        except ValueError:
+            continue  
+
+
+import sys
+
+sum_price = 0
+count = 0
+sum_squares = 0
+
+for line in sys.stdin:
+    price, count_str = line.strip().split('\t')
+
+    price = float(price)
+    count = int(count_str)
+
+    sum_price += price
+    sum_squares += price * price
+    count += count
+
+mean = sum_price / count
+
+E[X^2] - (E[X])^2
+variance = (sum_squares / count) - (mean ** 2)
+
+print(f"Mean: {mean}")
+print(f"Variance: {variance}")
+
+hdfs dfs -put /home/KaterinaBoyko/downloads/airbnb.csv /user/KaterinaBoyko/airbnb/
+
+hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-*.jar \
+    -input /user/KaterinaBoyko/airbnb/airbnb.csv \
+    -output /user/KaterinaBoyko/output/ \
+    -mapper /home/KaterinaBoyko/downloads/mapper.py \
+    -reducer /home/KaterinaBoyko/downloads/reducer.py
+
+hdfs dfs -cat /user/KaterinaBoyko/output/part-00000
+
+CREATE EXTERNAL TABLE airbnb(
+    id STRING,
+    name STRING,
+    host_id STRING,
+    host_name STRING,
+    neighbourhood_group STRING,
+    neighbourhood STRING,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    room_type STRING,
+    price DOUBLE,
+    ...
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/KaterinaBoyko/hive/warehouse/airbnb';
+
+SELECT
+    AVG(price) AS mean_price,
+    VARIANCE(price) AS variance_price
+FROM airbnb;
+
+
+
